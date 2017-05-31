@@ -1,18 +1,32 @@
-//Tony Peraza
-//20JUN17
-//ICS 240-01 
-//Assignment 2 
-//https://github.com/tony2times2times/TowersOfHanoi
-
-//TODO test all functions
-//TODO verify all outputs
-
 package edu.metrostate.ics240.p2.towers;
 
-public class Towers {
-	private int[] pegOne, pegTwo, pegThree;
-	private int[][] allPegs;
+/**
+ * The Class Towers.
+ * 
+ * @author Tony Peraza
+ * @since 20JUN17
+ * @see <a href= 'https://github.com/tony2times2times/TowersOfHanoi'>GitHub</a>
+ *      <p>
+ *      <b>Note:</b>This is for Metrostate ICS 240-01 Assignment 2
+ *      <p>
+ */
 
+public class Towers {
+
+	/** The peg three. */
+	public int[] pegOne, pegTwo, pegThree;
+
+	/** The all pegs. */
+	public int[][] allPegs;
+
+	/**
+	 * Instantiates a new towers.
+	 *
+	 * @param n
+	 *            creates n rings on the first tower leaving the other two
+	 *            towers empty. <br>
+	 *            - Must be an integer between 1 and 64.
+	 */
 	public Towers(int n) {
 		this.pegOne = new int[n];
 		this.pegTwo = new int[n];
@@ -24,11 +38,14 @@ public class Towers {
 				pegOne[i] = (i + 1);
 			}
 		} else {
-			throw new IllegalArgumentException("Value must be between 1 and 64.");
+			throw new IllegalArgumentException("Parameter must be between 1 and 64.");
 		}
 		this.allPegs = new int[][] { pegOne, pegTwo, pegThree };
 	}
 
+	/**
+	 * Instantiates a new towers of default size.
+	 */
 	public Towers() {
 		int defaultSize = 5;
 		this.pegOne = new int[defaultSize];
@@ -44,13 +61,21 @@ public class Towers {
 		this.allPegs = new int[][] { pegOne, pegTwo, pegThree };
 	}
 
+	/**
+	 * Gets the ring count.
+	 *
+	 * @param pegNumber
+	 *            the number representing a peg. <br>
+	 *            - Must be an integer between one and three.
+	 * @return the number of rings on the specified peg.
+	 */
 	// TODO add Javadoc
 	public int getRingCount(int pegNumber) {
-		if (!verifyPeg(pegNumber) ) {
-			throw new IllegalArgumentException("pegNumber must be a value between 1 and 3");
+		if (!verifyPeg(pegNumber)) {
+			throw new IllegalArgumentException("pegNumber must be 1, 2, or 3");
 		} else {
 			int ringCount = 0;
-			//subtract one from pegNumber to get the index of all pegs
+			// subtract one from pegNumber to get the index of all pegs
 			pegNumber--;
 			for (int i : allPegs[pegNumber]) {
 				if (i != 0) {
@@ -61,7 +86,17 @@ public class Towers {
 		}
 	}
 
-	// TODO add Javadoc
+	/**
+	 * Gets the top diameter.
+	 *
+	 * @param pegNumber
+	 *            the number representing a peg. <br>
+	 *            - Must be an integer between one and three.
+	 * @return If getRingCount(pegNumber) > 0, then the return value is the
+	 *         diameter <br>
+	 *         of the top ring on the specified peg; otherwise, the return value
+	 *         is zero.
+	 */
 	public int getTopDiameter(int pegNumber) {
 		int ringIndex = getRingCount(pegNumber);
 		// If there are no rings on the peg return zero.
@@ -71,36 +106,73 @@ public class Towers {
 			// Subtract one from the count to get the index. if the count is 1
 			// peg the index of that peg is zero
 			ringIndex--;
+			// Subtract one from the pegNumber because allPegs also indexes at
+			// zero
+			pegNumber--;
 			return allPegs[pegNumber][ringIndex];
 		}
-
 	}
 
+	/**
+	 * Move.
+	 * <p>
+	 * Moves a ring from the startPeg to the endPeg.
+	 * </p>
+	 * 
+	 * @param startPeg
+	 *            the source of the ring to be moved. <br>
+	 *            - Must not be the same value as endPeg.<br>
+	 *            - Must be a peg with at least one ring.<br>
+	 *            - Must be an integer between one and three.<br>
+	 * @param endPeg
+	 *            the destination peg. <br>
+	 *            - Must not be the same value as startPeg. <br>
+	 *            - Must be an integer between one and three<br>
+	 * @return true, if successful. <br>
+	 *         false, if not successful.
+	 */
 	public boolean move(int startPeg, int endPeg) {
-		int movingRingDiameter = getTopDiameter(startPeg);
-		int endRingDiameter = getTopDiameter(startPeg);
+		// Verify preconditions and if not met return false
+		if (startPeg == endPeg || !verifyPeg(startPeg) || !verifyPeg(endPeg)) {
+			return false;
+		}
 		/*
-		 * one is subtracted because ring count returns the number of rings not
-		 * the index. (i.e. if there is 1 ring 1 is returned not zero)
+		 * One is subtracted because ring count returns the number of rings not
+		 * the index (i.e. if there is 1 ring 1 is returned not zero).
 		 */
 		int startPegRingIndex = getRingCount(startPeg) - 1;
-		// In this case the ringCount is perfect because we will be placing a
-		// Destination index for the ring to be moved.
 		int endPegRingIndex = getRingCount(endPeg);
-		// Verify preconditions and if not met return false
-		if (startPeg == endPeg || startPeg < 1 || startPeg > 3 || endPeg < 1 || endPeg > 3 || startPegRingIndex < 0
-				|| movingRingDiameter > endRingDiameter) {
+		if (startPegRingIndex <= 0) {
 			return false;
-		} else {
-			// Create a new ring on the end peg identical to the ring being
-			// moved
-			allPegs[endPeg][endPegRingIndex] = allPegs[startPeg][startPegRingIndex];
-			// Remove the ring from the startPeg
-			allPegs[startPeg][startPegRingIndex] = 0;
-			return true;
 		}
+		int movingRingDiameter = getTopDiameter(startPeg);
+		int endRingDiameter = getTopDiameter(endPeg);
+		if (movingRingDiameter > endRingDiameter) {
+			return false;
+		}
+		//Subtract one from startPeg and endPeg to get the index.
+		startPeg--;
+		endPeg--;
+		// Create a new ring on the end peg identical to the ring being
+		// moved
+		allPegs[endPeg][endPegRingIndex] = allPegs[startPeg][startPegRingIndex];
+		// Remove the ring from the startPeg
+		allPegs[startPeg][startPegRingIndex] = 0;
+		return true;
 	}
 
+	/**
+	 * Verify peg.
+	 * <p>
+	 * verifies that the specified peg is a number 1 to 3
+	 * </p>
+	 * 
+	 * @param peg
+	 *            the number representing a peg. <br>
+	 *            - Must be an integer between one and three
+	 * @return true, if successful. <br>
+	 *         false, if not successful.
+	 */
 	private boolean verifyPeg(int peg) {
 		if (peg >= 1 && peg <= 3) {
 			return true;
