@@ -26,9 +26,11 @@ public class TowersTest {
 			fail("Towers(n) failed");
 		} catch (IllegalArgumentException e) {
 		}
-
-		// getRingCount(int pegNumber) test
+		
 		if (gameNoInput.getRingCount(1) != 5 || gameNoInput.getRingCount(2) != 0 || gameNoInput.getRingCount(3) != 0) {
+			fail("getRingCount(int pegNumber) failed");
+		}
+		if (gameSize64.getRingCount(1) != 64 || gameSize64.getRingCount(2) != 0 || gameSize64.getRingCount(3) != 0) {
 			fail("getRingCount(int pegNumber) failed");
 		}
 		try {
@@ -45,7 +47,7 @@ public class TowersTest {
 		}
 
 		// getTopDiameter (int pegNumber) test
-		if (gameSize64.getTopDiameter(1) != 64 || gameNoInput.getTopDiameter(1) != 5) {
+		if (gameSize64.getTopDiameter(1) != 1 || gameNoInput.getTopDiameter(1) != 1) {
 			fail("getRingCount(int pegNumber) failed");
 		}
 
@@ -67,7 +69,7 @@ public class TowersTest {
 		if (gameSize64.move(2, 3)) {
 		 fail("move(int startPeg, int endPeg) failed");
 		 }
-		 if(gameSize64.getTopDiameter(1) != 62){
+		 if(gameSize64.getTopDiameter(1) != 3){
 		 fail("move(int startPeg, int endPeg) is not removing a ring from startPeg");
 		 }
 	}

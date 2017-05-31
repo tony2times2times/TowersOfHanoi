@@ -14,10 +14,10 @@ package edu.metrostate.ics240.p2.towers;
 public class Towers {
 
 	/** The peg three. */
-	public int[] pegOne, pegTwo, pegThree;
+	private int[] pegOne, pegTwo, pegThree;
 
 	/** The all pegs. */
-	public int[][] allPegs;
+	private int[][] allPegs;
 
 	/**
 	 * Instantiates a new towers.
@@ -32,15 +32,18 @@ public class Towers {
 		this.pegTwo = new int[n];
 		this.pegThree = new int[n];
 		if (n >= 1 && n <= 64) {
-			for (int i = 0; i < n; i++) {
+			int i = 0;
+			for (int j = n; j > 0; j--) {
 				// Initialize pegOne with n rings of increasing size starting
 				// with a diameter of one.
-				pegOne[i] = (i + 1);
+				pegOne[i] = (j);
+				i++;
 			}
 		} else {
 			throw new IllegalArgumentException("Parameter must be between 1 and 64.");
 		}
 		this.allPegs = new int[][] { pegOne, pegTwo, pegThree };
+		System.out.println(java.util.Arrays.toString(pegOne));
 	}
 
 	/**
@@ -48,17 +51,20 @@ public class Towers {
 	 */
 	public Towers() {
 		int defaultSize = 5;
-		this.pegOne = new int[defaultSize];
-		this.pegTwo = new int[defaultSize];
-		this.pegThree = new int[defaultSize];
-		for (int i = 0; i < defaultSize; i++) {
+		this.pegOne = new int [defaultSize];
+		this.pegTwo = new int [defaultSize];
+		this.pegThree = new int [defaultSize];
+		int i = 0;
+		for (int j = defaultSize; j > 0; j--) {
 			/*
 			 * Initialize pegOne with n rings of increasing size starting with a
 			 * diameter of one.
 			 */
-			pegOne[i] = (i + 1);
+			pegOne[i] = (j);
+			i++;
 		}
 		this.allPegs = new int[][] { pegOne, pegTwo, pegThree };
+		System.out.println(java.util.Arrays.toString(pegOne));
 	}
 
 	/**
@@ -137,7 +143,7 @@ public class Towers {
 			return false;
 		}
 		/*
-		 * One is subtracted because ring count returns the number of rings not
+		 * One is subtracted because startPegIndex. Count returns the number of rings not
 		 * the index (i.e. if there is 1 ring 1 is returned not zero).
 		 */
 		int startPegRingIndex = getRingCount(startPeg) - 1;
@@ -146,19 +152,22 @@ public class Towers {
 			return false;
 		}
 		int movingRingDiameter = getTopDiameter(startPeg);
+		System.out.println(movingRingDiameter);
 		int endRingDiameter = getTopDiameter(endPeg);
-		if (movingRingDiameter > endRingDiameter) {
+		System.out.println(endRingDiameter);
+		if (movingRingDiameter < endRingDiameter || endRingDiameter == 0) {
+			// Subtract one from startPeg and endPeg to get the index.
+			startPeg--;
+			endPeg--;
+			// Create a new ring on the end peg identical to the ring being
+			// moved
+			allPegs[endPeg][endPegRingIndex] = allPegs[startPeg][startPegRingIndex];
+			// Remove the ring from the startPeg
+			allPegs[startPeg][startPegRingIndex] = 0;
+			return true;	
+		}else{
 			return false;
 		}
-		//Subtract one from startPeg and endPeg to get the index.
-		startPeg--;
-		endPeg--;
-		// Create a new ring on the end peg identical to the ring being
-		// moved
-		allPegs[endPeg][endPegRingIndex] = allPegs[startPeg][startPegRingIndex];
-		// Remove the ring from the startPeg
-		allPegs[startPeg][startPegRingIndex] = 0;
-		return true;
 	}
 
 	/**
