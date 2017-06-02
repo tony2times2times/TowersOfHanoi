@@ -43,7 +43,6 @@ public class Towers {
 			throw new IllegalArgumentException("Parameter must be between 1 and 64.");
 		}
 		this.allPegs = new int[][] { pegOne, pegTwo, pegThree };
-		System.out.println(java.util.Arrays.toString(pegOne));
 	}
 
 	/**
@@ -64,7 +63,6 @@ public class Towers {
 			i++;
 		}
 		this.allPegs = new int[][] { pegOne, pegTwo, pegThree };
-		System.out.println(java.util.Arrays.toString(pegOne));
 	}
 
 	/**
@@ -152,9 +150,7 @@ public class Towers {
 			return false;
 		}
 		int movingRingDiameter = getTopDiameter(startPeg);
-		System.out.println(movingRingDiameter);
 		int endRingDiameter = getTopDiameter(endPeg);
-		System.out.println(endRingDiameter);
 		if (movingRingDiameter < endRingDiameter || endRingDiameter == 0) {
 			// Subtract one from startPeg and endPeg to get the index.
 			startPeg--;
