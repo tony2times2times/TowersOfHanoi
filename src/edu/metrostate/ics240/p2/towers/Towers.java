@@ -15,9 +15,9 @@ import java.util.Arrays;
  */
 
 public class Towers {
-	/**The default size for pegs. */
+	/** The default size for pegs. */
 	private static final int DEFAULT_SIZE = 5;
-	
+
 	/** The pegs. */
 	private int[] pegOne, pegTwo, pegThree;
 
@@ -67,14 +67,14 @@ public class Towers {
 	 */
 	// TODO add Javadoc
 	public int getRingCount(int pegNumber) {
-			pegNumber = verifyPeg(pegNumber);
-			int ringCount = 0;
-			for (int i : allPegs[pegNumber]) {
-				if (i != 0) {
-					ringCount++;
-				}
+		pegNumber = getPegIndex(pegNumber);
+		int ringCount = 0;
+		for (int i : allPegs[pegNumber]) {
+			if (i != 0) {
+				ringCount++;
 			}
-			return ringCount;
+		}
+		return ringCount;
 	}
 
 	/**
@@ -90,9 +90,9 @@ public class Towers {
 	 */
 	public int getTopDiameter(int pegNumber) {
 		int ringIndex = getRingCount(pegNumber);
-		pegNumber = verifyPeg(pegNumber);
+		pegNumber = getPegIndex(pegNumber);
 		// If there are no rings on the peg return zero.
-		//pegNumber = verifyPeg(pegNumber);
+		// pegNumber = getPegIndex(pegNumber);
 		if (ringIndex == 0) {
 			return 0;
 		} else {
@@ -122,47 +122,45 @@ public class Towers {
 	 *         false, if not successful.
 	 */
 	public boolean move(int startPeg, int endPeg) {
+		int startPegRingIndex;
+		int endPegRingIndex;
+		int movingRingDiameter;
+		int endRingDiameter;
 		// Verify preconditions and if not met return false
-		try{
-		verifyPeg(startPeg);
-		verifyPeg(endPeg);
-		}
-		catch (IllegalArgumentException e){
+		try {
+			/*
+			 * One is subtracted because startPegIndex. Count returns the number of
+			 * rings not the index (i.e. if there is 1 ring 1 is returned not zero).
+			 */
+			startPegRingIndex = getRingCount(startPeg) - 1;
+			endPegRingIndex = getRingCount(endPeg);
+			movingRingDiameter = getTopDiameter(startPeg);
+			endRingDiameter = getTopDiameter(endPeg);
+			startPeg = getPegIndex(startPeg);
+			endPeg = getPegIndex(endPeg);
+		} catch (IllegalArgumentException e) {
 			return false;
 		}
-		if (startPeg == endPeg) {
+		if (startPeg == endPeg || startPegRingIndex <= 0) {
 			return false;
 		}
-		/*
-		 * One is subtracted because startPegIndex. Count returns the number of rings not
-		 * the index (i.e. if there is 1 ring 1 is returned not zero).
-		 */
-		int startPegRingIndex = getRingCount(startPeg) - 1;
-		int endPegRingIndex = getRingCount(endPeg);
-		if (startPegRingIndex <= 0) {
-			return false;
-		}
-		int movingRingDiameter = getTopDiameter(startPeg);
-		int endRingDiameter = getTopDiameter(endPeg);
+		
 		if (movingRingDiameter < endRingDiameter || endRingDiameter == 0) {
-			// Subtract one from startPeg and endPeg to get the index.
-			startPeg--;
-			endPeg--;
 			// Create a new ring on the end peg identical to the ring being
 			// moved
 			allPegs[endPeg][endPegRingIndex] = allPegs[startPeg][startPegRingIndex];
 			// Remove the ring from the startPeg
 			allPegs[startPeg][startPegRingIndex] = 0;
-			return true;	
-		}else{
+			return true;
+		} else {
 			return false;
 		}
 	}
 
-	
+
 	/**
-	 * Verify peg.
-	 * <p>
+	 * Gets the peg index.
+	  * <p>
 	 * verifies that the specified peg is a number 1 to 3
 	 * </p>
 	 * 
@@ -171,9 +169,9 @@ public class Towers {
 	 *            - Must be an integer between one and three
 	 * @return the int value for the index of the peg.
 	 */
-	private int verifyPeg(int peg) {
+	private int getPegIndex(int peg) {
 		if (peg >= 1 && peg <= 3) {
-			//return the index of the peg.
+			// return the peg number minus one to get the index of the peg.
 			return (--peg);
 		} else {
 			throw new IllegalArgumentException("pegNumber must be 1, 2, or 3");
