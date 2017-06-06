@@ -1,22 +1,27 @@
 package edu.metrostate.ics240.p2.towers;
 
+import java.util.Arrays;
+
+// TODO: Auto-generated Javadoc
 /**
  * The Class Towers.
- * 
+ *
  * @author Tony Peraza
- * @since 20JUN17
  * @see <a href= 'https://github.com/tony2times2times/TowersOfHanoi'>GitHub</a>
  *      <p>
  *      <b>Note:</b>This is for Metrostate ICS 240-01 Assignment 2
  *      <p>
+ * @since 20JUN17
  */
 
 public class Towers {
-
-	/** The peg three. */
+	/**The default size for pegs. */
+	private static final int DEFAULT_SIZE = 5;
+	
+	/** The pegs. */
 	private int[] pegOne, pegTwo, pegThree;
 
-	/** The all pegs. */
+	/** The all pegs Array. */
 	private int[][] allPegs;
 
 	/**
@@ -49,20 +54,7 @@ public class Towers {
 	 * Instantiates a new towers of default size.
 	 */
 	public Towers() {
-		int defaultSize = 5;
-		this.pegOne = new int [defaultSize];
-		this.pegTwo = new int [defaultSize];
-		this.pegThree = new int [defaultSize];
-		int i = 0;
-		for (int j = defaultSize; j > 0; j--) {
-			/*
-			 * Initialize pegOne with n rings of increasing size starting with a
-			 * diameter of one.
-			 */
-			pegOne[i] = (j);
-			i++;
-		}
-		this.allPegs = new int[][] { pegOne, pegTwo, pegThree };
+		this(DEFAULT_SIZE);
 	}
 
 	/**
@@ -75,19 +67,14 @@ public class Towers {
 	 */
 	// TODO add Javadoc
 	public int getRingCount(int pegNumber) {
-		if (!verifyPeg(pegNumber)) {
-			throw new IllegalArgumentException("pegNumber must be 1, 2, or 3");
-		} else {
+			pegNumber = verifyPeg(pegNumber);
 			int ringCount = 0;
-			// subtract one from pegNumber to get the index of all pegs
-			pegNumber--;
 			for (int i : allPegs[pegNumber]) {
 				if (i != 0) {
 					ringCount++;
 				}
 			}
 			return ringCount;
-		}
 	}
 
 	/**
@@ -103,16 +90,15 @@ public class Towers {
 	 */
 	public int getTopDiameter(int pegNumber) {
 		int ringIndex = getRingCount(pegNumber);
+		pegNumber = verifyPeg(pegNumber);
 		// If there are no rings on the peg return zero.
+		//pegNumber = verifyPeg(pegNumber);
 		if (ringIndex == 0) {
 			return 0;
 		} else {
 			// Subtract one from the count to get the index. if the count is 1
 			// peg the index of that peg is zero
 			ringIndex--;
-			// Subtract one from the pegNumber because allPegs also indexes at
-			// zero
-			pegNumber--;
 			return allPegs[pegNumber][ringIndex];
 		}
 	}
@@ -137,7 +123,14 @@ public class Towers {
 	 */
 	public boolean move(int startPeg, int endPeg) {
 		// Verify preconditions and if not met return false
-		if (startPeg == endPeg || !verifyPeg(startPeg) || !verifyPeg(endPeg)) {
+		try{
+		verifyPeg(startPeg);
+		verifyPeg(endPeg);
+		}
+		catch (IllegalArgumentException e){
+			return false;
+		}
+		if (startPeg == endPeg) {
 			return false;
 		}
 		/*
@@ -166,6 +159,7 @@ public class Towers {
 		}
 	}
 
+	
 	/**
 	 * Verify peg.
 	 * <p>
@@ -175,14 +169,14 @@ public class Towers {
 	 * @param peg
 	 *            the number representing a peg. <br>
 	 *            - Must be an integer between one and three
-	 * @return true, if successful. <br>
-	 *         false, if not successful.
+	 * @return the int value for the index of the peg.
 	 */
-	private boolean verifyPeg(int peg) {
+	private int verifyPeg(int peg) {
 		if (peg >= 1 && peg <= 3) {
-			return true;
+			//return the index of the peg.
+			return (--peg);
 		} else {
-			return false;
+			throw new IllegalArgumentException("pegNumber must be 1, 2, or 3");
 		}
 	}
 }

@@ -9,8 +9,8 @@ public class TowersTest {
 	@Test
 	public void test() {
 		constructorTest();
-		getTopDiameterTest();
 		getRingCountTest();
+		getTopDiameterTest();
 		moveTest();
 	}
 
@@ -40,7 +40,6 @@ public class TowersTest {
 		assertEquals(gameSize64.getRingCount(1), 64);
 		assertEquals(gameSize64.getRingCount(2), 0);
 		assertEquals(gameSize64.getRingCount(3), 0);
-
 		try {
 			gameNoInput.getRingCount(4);
 			fail("getRingCount(int pegNumber) failed");
