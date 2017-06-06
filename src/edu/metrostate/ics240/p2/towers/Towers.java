@@ -126,11 +126,12 @@ public class Towers {
 		int endPegRingIndex;
 		int movingRingDiameter;
 		int endRingDiameter;
-		// Verify preconditions and if not met return false
+		// attempt to define local variables and if unable to return false
 		try {
 			/*
-			 * One is subtracted because startPegIndex. Count returns the number of
-			 * rings not the index (i.e. if there is 1 ring 1 is returned not zero).
+			 * One is subtracted because startPegIndex. Count returns the number
+			 * of rings not the index (i.e. if there is 1 ring 1 is returned not
+			 * zero).
 			 */
 			startPegRingIndex = getRingCount(startPeg) - 1;
 			endPegRingIndex = getRingCount(endPeg);
@@ -141,26 +142,22 @@ public class Towers {
 		} catch (IllegalArgumentException e) {
 			return false;
 		}
-		if (startPeg == endPeg || startPegRingIndex <= 0) {
+		// Verify preconditions and if not met return false
+		if (startPeg == endPeg || startPegRingIndex <= 0
+				|| (movingRingDiameter > endRingDiameter && endRingDiameter != 0)) {
 			return false;
 		}
-		
-		if (movingRingDiameter < endRingDiameter || endRingDiameter == 0) {
-			// Create a new ring on the end peg identical to the ring being
-			// moved
-			allPegs[endPeg][endPegRingIndex] = allPegs[startPeg][startPegRingIndex];
-			// Remove the ring from the startPeg
-			allPegs[startPeg][startPegRingIndex] = 0;
-			return true;
-		} else {
-			return false;
-		}
+		// Create a new ring on the end peg identical to the ring being
+		// moved
+		allPegs[endPeg][endPegRingIndex] = allPegs[startPeg][startPegRingIndex];
+		// Remove the ring from the startPeg
+		allPegs[startPeg][startPegRingIndex] = 0;
+		return true;
 	}
-
 
 	/**
 	 * Gets the peg index.
-	  * <p>
+	 * <p>
 	 * verifies that the specified peg is a number 1 to 3
 	 * </p>
 	 * 
@@ -174,7 +171,7 @@ public class Towers {
 			// return the peg number minus one to get the index of the peg.
 			return (--peg);
 		} else {
-			throw new IllegalArgumentException("pegNumber must be 1, 2, or 3");
+			throw new IllegalArgumentException("peg number must be 1, 2, or 3");
 		}
 	}
 }
