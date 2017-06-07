@@ -6,42 +6,45 @@ package edu.metrostate.ics240.p2.towers;
 public class Peg {
 
 	/** The stick. */
-	public int[] stick;
-	
+	private int[] stick;
+
 	/**
 	 * Instantiates a new peg.
 	 *
-	 * @param pegSize the peg size
+	 * @param pegSize
+	 *            the peg size
 	 */
-	Peg(int pegSize){
+	Peg(int pegSize) {
 		this.stick = new int[pegSize];
 	}
-	
-/**
- * Place ring.
- *
- * @param ringSize the ring size
- */
-public void placeRing (int ringSize){
-	int ringIndex = getRingCount();
-	stick[ringIndex] = ringSize;
-}
 
-/**
- * Removes the ring.
- */
-public void removeRing (){
-	//subtract one from the count to get the index of the ring to be removed
-	int ringIndex = getRingCount() -1;
-	stick[ringIndex] = 0;
-}
-	
+	/**
+	 * Place ring. places a ring on the stick
+	 *
+	 * @param ringSize
+	 *            the ring size
+	 */
+	void placeRing(int ringSize) {
+		int ringIndex = getRingCount();
+		stick[ringIndex] = ringSize;
+	}
+
+	/**
+	 * Removes the ring. removes a ring from te stick
+	 */
+	void removeRing() {
+		// subtract one from the count to get the index of the ring to be
+		// removed
+		int ringIndex = getRingCount() - 1;
+		stick[ringIndex] = 0;
+	}
+
 	/**
 	 * Gets the ring count.
 	 *
 	 * @return the ring count
 	 */
-	public int getRingCount() {
+	int getRingCount() {
 		int ringCount = 0;
 		for (int i = 0; i < stick.length; i++) {
 			if (stick[i] != 0) {
@@ -50,7 +53,7 @@ public void removeRing (){
 		}
 		return ringCount;
 	}
-	
+
 	/**
 	 * Gets the top diameter.
 	 *
@@ -59,8 +62,8 @@ public void removeRing (){
 	 *         of the top ring on the specified peg; otherwise, the return value
 	 *         is zero.
 	 */
-	public int getTopDiameter(){
-		int index = getRingCount()-1;
+	int getTopDiameter() {
+		int index = getRingCount() - 1;
 		if (index == -1) {
 			return 0;
 		}

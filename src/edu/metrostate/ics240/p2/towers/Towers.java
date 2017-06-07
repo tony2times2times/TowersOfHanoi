@@ -118,6 +118,7 @@ public class Towers {
 
 		// Place the ring on the endPeg.
 		allPegs[endPeg].placeRing(allPegs[startPeg].getTopDiameter());
+		
 		// Remove the ring from the startPeg.
 		allPegs[startPeg].removeRing();
 		return true;
