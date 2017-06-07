@@ -18,11 +18,8 @@ public class Towers {
 	/** The default size for pegs. */
 	private static final int DEFAULT_SIZE = 5;
 
-	/** The pegs. */
-	private int[] pegOne, pegTwo, pegThree;
-
 	/** The all pegs Array. */
-	private int[][] allPegs;
+	private Peg[] allPegs;
 
 	/**
 	 * Instantiates a new towers.
@@ -33,21 +30,14 @@ public class Towers {
 	 *            - Must be an integer between 1 and 64.
 	 */
 	public Towers(int n) {
-		this.pegOne = new int[n];
-		this.pegTwo = new int[n];
-		this.pegThree = new int[n];
+		this.allPegs = new Peg[] { new Peg(n), new Peg(n), new  Peg(n) };
 		if (n >= 1 && n <= 64) {
-			int i = 0;
-			for (int j = n; j > 0; j--) {
-				// Initialize pegOne with n rings of increasing size starting
-				// with a diameter of one.
-				pegOne[i] = (j);
-				i++;
+			for (int i = n; i > 0; i--) {
+				allPegs[1].placeRing(i);
 			}
 		} else {
 			throw new IllegalArgumentException("Parameter must be between 1 and 64.");
 		}
-		this.allPegs = new int[][] { pegOne, pegTwo, pegThree };
 	}
 
 	/**
@@ -68,13 +58,7 @@ public class Towers {
 	// TODO add Javadoc
 	public int getRingCount(int pegNumber) {
 		pegNumber = getPegIndex(pegNumber);
-		int ringCount = 0;
-		for (int i : allPegs[pegNumber]) {
-			if (i != 0) {
-				ringCount++;
-			}
-		}
-		return ringCount;
+		return allPegs[1].getRingCount();
 	}
 
 	/**
@@ -89,18 +73,8 @@ public class Towers {
 	 *         is zero.
 	 */
 	public int getTopDiameter(int pegNumber) {
-		int ringIndex = getRingCount(pegNumber);
 		pegNumber = getPegIndex(pegNumber);
-		// If there are no rings on the peg return zero.
-		// pegNumber = getPegIndex(pegNumber);
-		if (ringIndex == 0) {
-			return 0;
-		} else {
-			// Subtract one from the count to get the index. if the count is 1
-			// peg the index of that peg is zero
-			ringIndex--;
-			return allPegs[pegNumber][ringIndex];
-		}
+			return allPegs[pegNumber].getTopDiameter();
 	}
 
 	/**
@@ -149,9 +123,9 @@ public class Towers {
 		}
 		// Create a new ring on the end peg identical to the ring being
 		// moved
-		allPegs[endPeg][endPegRingIndex] = allPegs[startPeg][startPegRingIndex];
+		allPegs[endPeg].placeRing(allPegs[startPeg].getTopDiameter());
 		// Remove the ring from the startPeg
-		allPegs[startPeg][startPegRingIndex] = 0;
+		allPegs[startPeg].removeRing();
 		return true;
 	}
 
