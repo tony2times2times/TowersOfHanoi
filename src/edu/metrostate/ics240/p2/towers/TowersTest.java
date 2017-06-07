@@ -44,14 +44,12 @@ public class TowersTest {
 			gameNoInput.getRingCount(4);
 			fail("getRingCount(int pegNumber) failed");
 		} catch (IllegalArgumentException e) {
-
 		}
 		try {
 			gameNoInput.getRingCount(0);
 			fail("getRingCount(int pegNumber) failed");
 		} catch (IllegalArgumentException e) {
 		}
-
 	}
 
 	private void getTopDiameterTest() {
@@ -68,8 +66,11 @@ public class TowersTest {
 		assertFalse(gameSize64.move(0, 1));
 		assertFalse(gameSize64.move(1, 4));
 		assertTrue(gameSize64.move(1, 2));
+		assertEquals(gameSize64.getTopDiameter(2), 1);
 		assertTrue(gameSize64.move(1, 3));
-		assertFalse(gameSize64.move(2, 3));
+		assertEquals(gameSize64.getTopDiameter(3), 2);
+		assertFalse(gameSize64.move(3, 2));
+		assertTrue(gameSize64.move(2, 3));
 		assertEquals(gameSize64.getTopDiameter(1), 3);
 	}
 }

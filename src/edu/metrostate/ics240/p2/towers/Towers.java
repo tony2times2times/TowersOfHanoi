@@ -1,8 +1,5 @@
 package edu.metrostate.ics240.p2.towers;
 
-import java.util.Arrays;
-
-// TODO: Auto-generated Javadoc
 /**
  * The Class Towers.
  *
@@ -15,10 +12,11 @@ import java.util.Arrays;
  */
 
 public class Towers {
-	/** The default size for pegs. */
+
+	/** The Constant DEFAULT_SIZE. */
 	private static final int DEFAULT_SIZE = 5;
 
-	/** The all pegs Array. */
+	/** The all pegs. */
 	private Peg[] allPegs;
 
 	/**
@@ -30,10 +28,10 @@ public class Towers {
 	 *            - Must be an integer between 1 and 64.
 	 */
 	public Towers(int n) {
-		this.allPegs = new Peg[] { new Peg(n), new Peg(n), new  Peg(n) };
+		this.allPegs = new Peg[] { new Peg(n), new Peg(n), new Peg(n) };
 		if (n >= 1 && n <= 64) {
 			for (int i = n; i > 0; i--) {
-				allPegs[1].placeRing(i);
+				allPegs[0].placeRing(i);
 			}
 		} else {
 			throw new IllegalArgumentException("Parameter must be between 1 and 64.");
@@ -55,10 +53,9 @@ public class Towers {
 	 *            - Must be an integer between one and three.
 	 * @return the number of rings on the specified peg.
 	 */
-	// TODO add Javadoc
 	public int getRingCount(int pegNumber) {
 		pegNumber = getPegIndex(pegNumber);
-		return allPegs[1].getRingCount();
+		return (allPegs[pegNumber].getRingCount());
 	}
 
 	/**
@@ -74,7 +71,7 @@ public class Towers {
 	 */
 	public int getTopDiameter(int pegNumber) {
 		pegNumber = getPegIndex(pegNumber);
-			return allPegs[pegNumber].getTopDiameter();
+		return allPegs[pegNumber].getTopDiameter();
 	}
 
 	/**
@@ -96,49 +93,43 @@ public class Towers {
 	 *         false, if not successful.
 	 */
 	public boolean move(int startPeg, int endPeg) {
-		int startPegRingIndex;
-		int endPegRingIndex;
-		int movingRingDiameter;
-		int endRingDiameter;
-		// attempt to define local variables and if unable to return false
 		try {
+			// if the startPeg and endPeg are the same return false.
+			if (startPeg == endPeg) {
+				return false;
+			}
+			// If there are no rings on the startPeg return false.
+			else if (getRingCount(startPeg) == 0) {
+				return false;
+			}
 			/*
-			 * One is subtracted because startPegIndex. Count returns the number
-			 * of rings not the index (i.e. if there is 1 ring 1 is returned not
-			 * zero).
+			 * If the top ring on the startPeg is larger than the top ring on
+			 * the endPeg return false, unless there is no ring on the end Peg.
 			 */
-			startPegRingIndex = getRingCount(startPeg) - 1;
-			endPegRingIndex = getRingCount(endPeg);
-			movingRingDiameter = getTopDiameter(startPeg);
-			endRingDiameter = getTopDiameter(endPeg);
+			else if (getTopDiameter(startPeg) > getTopDiameter(endPeg) && getTopDiameter(endPeg) != 0) {
+				return false;
+			}
+			//Set the index for each peg.
 			startPeg = getPegIndex(startPeg);
 			endPeg = getPegIndex(endPeg);
 		} catch (IllegalArgumentException e) {
 			return false;
 		}
-		// Verify preconditions and if not met return false
-		if (startPeg == endPeg || startPegRingIndex <= 0
-				|| (movingRingDiameter > endRingDiameter && endRingDiameter != 0)) {
-			return false;
-		}
-		// Create a new ring on the end peg identical to the ring being
-		// moved
+
+		// Place the ring on the endPeg.
 		allPegs[endPeg].placeRing(allPegs[startPeg].getTopDiameter());
-		// Remove the ring from the startPeg
+		// Remove the ring from the startPeg.
 		allPegs[startPeg].removeRing();
 		return true;
+
 	}
 
 	/**
 	 * Gets the peg index.
-	 * <p>
-	 * verifies that the specified peg is a number 1 to 3
-	 * </p>
-	 * 
+	 *
 	 * @param peg
-	 *            the number representing a peg. <br>
-	 *            - Must be an integer between one and three
-	 * @return the int value for the index of the peg.
+	 *            the peg
+	 * @return the peg index
 	 */
 	private int getPegIndex(int peg) {
 		if (peg >= 1 && peg <= 3) {
